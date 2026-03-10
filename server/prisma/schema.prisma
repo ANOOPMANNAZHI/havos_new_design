@@ -1,0 +1,223 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id           Int      @id @default(autoincrement())
+  email        String   @unique
+  password     String
+  name         String
+  role         String   @default("admin")
+  refreshToken String?  @db.Text
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  @@map("users")
+}
+
+model Service {
+  id              Int      @id @default(autoincrement())
+  number          String   @db.VarChar(5)
+  slug            String   @unique
+  title           String
+  description     String   @db.Text
+  fullDescription String   @db.LongText
+  tags            Json
+  icon            String?
+  isActive        Boolean  @default(true)
+  sortOrder       Int      @default(0)
+  seoMetaTitle    String?
+  seoMetaDesc     String?  @db.Text
+  seoOgImage      String?
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  @@map("services")
+}
+
+model BlogPost {
+  id             Int       @id @default(autoincrement())
+  slug           String    @unique
+  title          String
+  excerpt        String    @db.Text
+  content        String    @db.LongText
+  tag            String
+  icon           String?
+  thumbnail      String?
+  publishedAt    DateTime  @default(now())
+  readTime       String?
+  author         String
+  authorRole     String?
+  authorInitials String?   @db.VarChar(5)
+  isPublished    Boolean   @default(true)
+  seoMetaTitle   String?
+  seoMetaDesc    String?   @db.Text
+  seoOgImage     String?
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
+
+  @@map("blog_posts")
+}
+
+model CaseStudy {
+  id          Int      @id @default(autoincrement())
+  number      String   @db.VarChar(5)
+  slug        String   @unique
+  title       String
+  client      String
+  description String   @db.Text
+  tags        Json
+  color       String?  @db.VarChar(20)
+  gradient    String?
+  challenge   String   @db.Text
+  solution    String   @db.Text
+  results     Json
+  thumbnail   String?
+  isActive    Boolean  @default(true)
+  sortOrder   Int      @default(0)
+  seoMetaTitle String?
+  seoMetaDesc  String? @db.Text
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@map("case_studies")
+}
+
+model Job {
+  id              Int      @id @default(autoincrement())
+  slug            String   @unique
+  title           String
+  type            String
+  location        String
+  dept            String
+  experience      String?
+  salary          String?
+  description     String   @db.Text
+  responsibilities Json
+  requirements     Json
+  isActive        Boolean  @default(true)
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  @@map("jobs")
+}
+
+model Testimonial {
+  id         Int      @id @default(autoincrement())
+  text       String   @db.Text
+  author     String
+  role       String
+  avatar     String?
+  rating     Int      @default(5)
+  project    String?
+  isFeatured Boolean  @default(false)
+  isActive   Boolean  @default(true)
+  sortOrder  Int      @default(0)
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  @@map("testimonials")
+}
+
+model FAQ {
+  id           Int      @id @default(autoincrement())
+  category     String
+  categoryIcon String?
+  question     String   @db.Text
+  answer       String   @db.Text
+  sortOrder    Int      @default(0)
+  isActive     Boolean  @default(true)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  @@map("faqs")
+}
+
+model TeamMember {
+  id        Int      @id @default(autoincrement())
+  name      String
+  role      String
+  initials  String?  @db.VarChar(5)
+  photo     String?
+  sortOrder Int      @default(0)
+  isActive  Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("team_members")
+}
+
+model PageContent {
+  id           Int      @id @default(autoincrement())
+  pageSlug     String   @unique
+  sections     Json
+  seoMetaTitle String?
+  seoMetaDesc  String?  @db.Text
+  seoOgImage   String?
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  @@map("page_contents")
+}
+
+model LegalPage {
+  id          Int      @id @default(autoincrement())
+  slug        String   @unique
+  title       String
+  lastUpdated DateTime @default(now())
+  sections    Json
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@map("legal_pages")
+}
+
+model Navigation {
+  id        Int      @id @default(autoincrement())
+  type      String   @unique
+  items     Json
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("navigations")
+}
+
+model ClientLogo {
+  id        Int      @id @default(autoincrement())
+  name      String
+  logo      String?
+  sortOrder Int      @default(0)
+  isActive  Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("client_logos")
+}
+
+model ContactSubmission {
+  id         Int      @id @default(autoincrement())
+  name       String
+  email      String
+  company    String?
+  details    String   @db.Text
+  isRead     Boolean  @default(false)
+  isArchived Boolean  @default(false)
+  createdAt  DateTime @default(now())
+
+  @@map("contact_submissions")
+}
+
+model Setting {
+  id           Int      @id @default(autoincrement())
+  settingKey   String   @unique
+  settingValue String   @db.Text
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  @@map("settings")
+}
